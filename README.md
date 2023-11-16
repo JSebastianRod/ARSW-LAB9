@@ -1,6 +1,8 @@
 ### Escuela Colombiana de Ingeniería
 ### Arquitecturas de Software - ARSW
 
+### Juan Pablo Daza Pinzon - Juan Sebastian Rodriguez Peña
+
 ## Escalamiento en Azure con Maquinas Virtuales, Sacale Sets y Service Plans
 
 ### Dependencias
@@ -245,14 +247,67 @@ newman run ARSW_LOAD-BALANCING_AZURE.postman_collection.json -e [ARSW_LOAD-BALAN
 **Preguntas**
 
 * ¿Cuáles son los tipos de balanceadores de carga en Azure y en qué se diferencian?, ¿Qué es SKU, qué tipos hay y en qué se diferencian?, ¿Por qué el balanceador de carga necesita una IP pública?
+
+#### Balanceador de Carga de Aplicación (ALB - Application Load Balancer):<br>
+Este tipo de balanceador de carga opera en la capa de aplicación del modelo OSI (capa 7) y es ideal para enrutar el tráfico basándose en información contenida en la capa de aplicación, como el contenido del encabezado HTTP.Es capaz de realizar un balanceo de carga basado en la ruta URL, lo que permite direccionar solicitudes a diferentes conjuntos de servidores según la ruta solicitada.<br>
+
+#### Balanceador de Carga de Red (NLB - Network Load Balancer):<br>
+Opera en la capa de red del modelo OSI (capa 4) y se utiliza para distribuir el tráfico de red de manera eficiente entre los servidores de la misma manera, independientemente de la solicitud específica.Es más adecuado para cargas de trabajo que requieren un rendimiento extremadamente alto y baja latencia.<br>
+
+#### Gateway de Aplicación (WAG - Web Application Gateway):<br>
+Similar al balanceador de carga de aplicación, pero está diseñado específicamente para aplicaciones web, proporcionando características adicionales como el equilibrio de carga basado en el tráfico de la aplicación web.  Ofrece funciones avanzadas de seguridad y análisis de tráfico específicas para aplicaciones web.<br>
+
+El balanceador de carga necesita una IP pública porque actúa como el punto de entrada para el tráfico desde Internet hacia los recursos que se encuentran detrás del balanceador. La IP pública permite que los clientes accedan a la aplicación o servicio hospedado en Azure a través del balanceador de carga. Además, proporciona una dirección IP única y pública que puede ser utilizada para enrutar el tráfico desde Internet hacia los nodos del conjunto de servidores configurado en el balanceador de carga.
+
 * ¿Cuál es el propósito del *Backend Pool*?
+
+Se refiere al grupo de instancias o máquinas virtuales que reciben y manejan el tráfico de red que pasa a través del balanceador. El propósito principal del Backend Pool es distribuir equitativamente la carga de trabajo entre los diferentes servidores para garantizar un rendimiento eficiente y una alta disponibilidad.
+
 * ¿Cuál es el propósito del *Health Probe*?
+
+Es una característica crucial en los balanceadores de carga que tiene como propósito principal monitorear continuamente la salud y disponibilidad de los servidores dentro del Backend Pool. La Health Probe permite al balanceador de carga determinar qué servidores son capaces de manejar el tráfico de manera adecuada en un momento dado y dirigir el tráfico solo a aquellos que están en un estado saludable.
+
 * ¿Cuál es el propósito de la *Load Balancing Rule*? ¿Qué tipos de sesión persistente existen, por qué esto es importante y cómo puede afectar la escalabilidad del sistema?.
+
+Es una configuración fundamental en un balanceador de carga que define cómo se distribuirá el tráfico entre los servidores del Backend Pool. Esta regla especifica el tráfico que llega al balanceador y cómo debe ser dirigido a través de los servidores.
+
+#### IP Hash:
+Asocia la persistencia de sesión a la dirección IP del cliente. Garantiza que todas las solicitudes de un cliente específico se dirijan al mismo servidor en el Backend Pool.
+
+#### Cookie Persistente:
+Utiliza una cookie almacenada en el navegador del cliente para mantener la persistencia de la sesión. La cookie contiene información que identifica al servidor al que deben dirigirse las solicitudes del cliente.<br>
+
+La persistencia de sesión es importante para aplicaciones que almacenan información de estado en el servidor y necesitan mantener la continuidad de la sesión del usuario. Sin embargo, puede afectar la escalabilidad del sistema ya que limita la capacidad del balanceador de carga para distribuir dinámicamente el tráfico entre los servidores disponibles.
+
 * ¿Qué es una *Virtual Network*? ¿Qué es una *Subnet*? ¿Para qué sirven los *address space* y *address range*?
+
+Una *Virtual Network* en Azure es un servicio que permite crear redes privadas en la nube de Azure. Proporciona una segmentación lógica de la infraestructura en la nube para organizar y aislar los recursos de manera efectiva.<br>
+
+Una *Subnet* es una división de una Virtual Network en segmentos más pequeños. Cada subred tiene una dirección IP y un rango de direcciones IP asociados. Las subredes se utilizan para organizar recursos dentro de una red virtual y permiten aplicar políticas y controles de acceso a nivel de subred.<br>
+
+#### Address Space: 
+Es el rango total de direcciones IP que se asigna a una red virtual. Define el conjunto completo de direcciones IP que pueden utilizarse dentro de esa red.
+
+#### Address Range: 
+Es un subconjunto del espacio de direcciones y define un rango específico de direcciones IP dentro de la Virtual Network. Cada subred tiene su propio rango de direcciones IP, que se define dentro del address space de la VNet.
+
 * ¿Qué son las *Availability Zone* y por qué seleccionamos 3 diferentes zonas?. ¿Qué significa que una IP sea *zone-redundant*?
+
+Son ubicaciones físicas separadas dentro de una región de Azure. Cada zona de disponibilidad se compone de uno o más centros de datos equipados con infraestructura independiente, como energía, refrigeración y redes.<br>
+
+Cuando seleccionamos tres Availability Zones en Azure, estamos distribuyendo los recursos en distintas ubicaciones físicas para mitigar el impacto de posibles fallas o interrupciones en una zona específica.<br>
+
+La expresión "zone-redundant" en el contexto de una IP significa que la dirección IP está diseñada para ser redundante a través de las distintas Availability Zones. Esto significa que la IP puede ser utilizada de manera transparente en todas las zonas sin que el usuario o la aplicación tengan que preocuparse por gestionar la redundancia de direcciones IP manualmente.
+
 * ¿Cuál es el propósito del *Network Security Group*?
+
+Es un servicio en Azure que actúa como un firewall virtual para controlar el tráfico de red hacia los recursos en una red virtual. Su propósito principal es proporcionar un control de acceso basado en reglas para permitir o denegar el tráfico de red según las necesidades de seguridad de la aplicación.
+
 * Informe de newman 1 (Punto 2)
 * Presente el Diagrama de Despliegue de la solución.
+
+![](./images/Lab/DiagramaDespliegue.png)<br>
+
 
 
 
